@@ -1,0 +1,16 @@
+{
+  "name": "Hello Extensions",
+  "description": "Base Level Extension",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "extension.html",
+    "default_icon": "pic/icon.png"
+  },
+  "options_page": "settings.html",
+  "background": { "service_worker": "js/sw.js" },
+  "permissions": ["storage", "alarms", "notifications"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
