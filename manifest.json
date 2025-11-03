@@ -9,7 +9,16 @@
   },
   "options_page": "settings.html",
   "background": { "service_worker": "js/sw.js" },
-  "permissions": ["storage", "alarms", "notifications"],
+  "permissions": ["storage", "alarms", "notifications", "declarativeNetRequest"],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "website_rules",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   }

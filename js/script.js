@@ -12,9 +12,29 @@ async function updateButtons() {
   }
 }
 
+async function blockSite(){
+  let blocker = document.getElementById("blocker");
+  if (blocker.checked == true) {
+    await chrome.declarativeNetRequest.updateEnabledRulesets({
+      enableRulesetIds: ["website_rules"]
+    });
+    await chrome.storage.local.set({ websiteBlocked: true });
+  }else{
+    await chrome.declarativeNetRequest.updateEnabledRulesets({
+      disableRulesetIds: ["website_rules"]
+    });
+    await chrome.storage.local.set({ websiteBlocked: false });
+  }
+}
+
 
 document.addEventListener("DOMContentLoaded", async () => {
   await updateButtons();
+  document.getElementById("blocker").addEventListener("change", blockSite);
+
+  let { websiteBlocked } = await chrome.storage.local.get(['websiteBlocked']);
+  document.getElementById("blocker").checked = websiteBlocked || false;
+
 
   const { timerDuration } = await chrome.storage.local.get(['timerDuration']);
   let totalTime = timerDuration * 60; 
@@ -44,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (isPaused === true && remainingTime) {
       displayTime = remainingTime;
     } 
-    // Fall 2: Timer läuft - berechne die verbleibende Zeit
+    // Fall 2: Timer läuft = verbleibende Zeit
     else if (isPaused === false && endTime) {
       displayTime = endTime - Date.now();
       
@@ -71,20 +91,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   setInterval(updateDisplay, 100);
   
   document.getElementById("start").addEventListener('click', async () => {
-    sendSW("Start Timer", totalTime);
-    // ❌ ENTFERNT: setTimeout(updateButtons, 25);
-    // Der Storage Listener macht das jetzt automatisch!
+    sendSW("Start Timer", totalTime);  
   });
   
   document.getElementById("stop").addEventListener('click', async () => {
     sendSW("Stop Timer");
-    // ❌ ENTFERNT: setTimeout(updateButtons, 25);
   });
   
   document.getElementById("reset").addEventListener('click', async () => {
     sendSW("Reset Timer");
-    // ❌ ENTFERNT: setTimeout(updateButtons, 25);
-    // Nach Reset müssen wir die Buttons manuell aktualisieren
     setTimeout(updateButtons, 50);
   });
 });

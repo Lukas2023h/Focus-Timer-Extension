@@ -1,0 +1,5 @@
+_metadata/
+node_modules/
+.DS_Store
+*.log
+.vscode/
