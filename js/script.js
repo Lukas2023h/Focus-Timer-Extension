@@ -19,7 +19,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const { timerDuration } = await chrome.storage.local.get(['timerDuration']);
   let totalTime = timerDuration * 60; 
 
-  
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === 'local' && changes.isPaused) {
+      updateButtons();
+    }
+  });
 
   function sendSW(msg){
     const messageData = { message: msg };
@@ -32,48 +36,55 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function updateDisplay(){
-    let { endTime, isPaused } = await chrome.storage.local.get(['endTime', 'isPaused']);
+    let { endTime, isPaused, remainingTime } = await chrome.storage.local.get(['endTime', 'isPaused', 'remainingTime']);
 
-    if (isPaused === true) {
-      let {remainingTime} = await chrome.storage.local.get(["remainingTime"]);
-      if (remainingTime) {
-        let remainingSec = Math.floor(remainingTime / 1000);
-        let Min = Math.floor(remainingSec / 60);
-        let Sec = remainingSec % 60;
-        document.getElementById("timer").textContent = `${Min}:${Sec.toString().padStart(2, '0')}`;
+    let displayTime = 0; 
+
+    // Fall 1: Timer ist pausiert - zeige die gespeicherte verbleibende Zeit
+    if (isPaused === true && remainingTime) {
+      displayTime = remainingTime;
+    } 
+    // Fall 2: Timer läuft - berechne die verbleibende Zeit
+    else if (isPaused === false && endTime) {
+      displayTime = endTime - Date.now();
+      
+      //Zeit abgelaufen = 00:00
+      if (displayTime <= 0) {
+        document.getElementById("timer").textContent = `00:00`;
+        return;
       }
-    }else{
-      return;
+    }
+    // Fall 3: Timer wurde noch nie gestartet - zeige die eingestellte Dauer
+    else {
+      displayTime = totalTime * 1000;
     }
 
-    if (!endTime) return;
-
-    let remainingMs = endTime - Date.now();
-    if (remainingMs <= 0) {
-      document.getElementById("timer").textContent = `00:00`;
-      return;
-    }
-
-    let remainingSec = Math.floor(remainingMs / 1000);
+    
+    let remainingSec = Math.floor(displayTime / 1000);
     let Min = Math.floor(remainingSec / 60);
     let Sec = remainingSec % 60;
 
     document.getElementById("timer").textContent = `${Min}:${Sec.toString().padStart(2, '0')}`;
-
   }
 
+  // Update Display alle 100ms
   setInterval(updateDisplay, 100);
+  
   document.getElementById("start").addEventListener('click', async () => {
     sendSW("Start Timer", totalTime);
-    setTimeout(updateButtons, 25);
+    // ❌ ENTFERNT: setTimeout(updateButtons, 25);
+    // Der Storage Listener macht das jetzt automatisch!
   });
+  
   document.getElementById("stop").addEventListener('click', async () => {
     sendSW("Stop Timer");
-    setTimeout(updateButtons, 25);
+    // ❌ ENTFERNT: setTimeout(updateButtons, 25);
   });
+  
   document.getElementById("reset").addEventListener('click', async () => {
     sendSW("Reset Timer");
-    setTimeout(updateButtons, 25);
+    // ❌ ENTFERNT: setTimeout(updateButtons, 25);
+    // Nach Reset müssen wir die Buttons manuell aktualisieren
+    setTimeout(updateButtons, 50);
   });
 });
-
