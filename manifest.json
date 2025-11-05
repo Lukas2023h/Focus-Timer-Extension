@@ -14,7 +14,7 @@
     "rule_resources": [
       {
         "id": "website_rules",
-        "enabled": true,
+        "enabled": false,
         "path": "rules.json"
       }
     ]

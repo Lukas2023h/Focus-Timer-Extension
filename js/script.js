@@ -12,28 +12,67 @@ async function updateButtons() {
   }
 }
 
+async function applyBlocking (){
+  let { blockedWebsites = [] } = await chrome.storage.local.get("blockedWebsites");
+  let existingRules = await chrome.declarativeNetRequest.getDynamicRules();
+  let allIds = existingRules.map(r => r.id);
+
+  let id = 1; 
+
+    for (const site of blockedWebsites) {
+      const url = `*${site}.com*`;
+      await chrome.declarativeNetRequest.updateDynamicRules({
+        removeRuleIds: allIds, // gleiche ID vorher raus, sonst Konflikt
+        addRules: [{
+          id,
+          priority: 1,
+          action: { type: "block" },
+          condition: { urlFilter: url, resourceTypes: ["main_frame","sub_frame"] }
+        }]
+      });
+      id++;
+    }
+}
+
+// Enable block if blocker checkbox is checked
 async function blockSite(){
   let blocker = document.getElementById("blocker");
+
   if (blocker.checked == true) {
-    await chrome.declarativeNetRequest.updateEnabledRulesets({
-      enableRulesetIds: ["website_rules"]
-    });
+    await applyBlocking();
     await chrome.storage.local.set({ websiteBlocked: true });
   }else{
-    await chrome.declarativeNetRequest.updateEnabledRulesets({
-      disableRulesetIds: ["website_rules"]
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: (await chrome.declarativeNetRequest.getDynamicRules()).map(r => r.id)
     });
     await chrome.storage.local.set({ websiteBlocked: false });
   }
 }
 
 
+
+
 document.addEventListener("DOMContentLoaded", async () => {
   await updateButtons();
   document.getElementById("blocker").addEventListener("change", blockSite);
 
+  
+  chrome.storage.onChanged.addListener( async (changes, areaName) => {
+    if (areaName === 'local' && changes.blockedWebsites) {
+      let { websiteBlocked } = await chrome.storage.local.get(['websiteBlocked']);
+      if (websiteBlocked) {
+        await applyBlocking();
+      }
+    }
+  });
+
+  // load blocker checkbox
   let { websiteBlocked } = await chrome.storage.local.get(['websiteBlocked']);
   document.getElementById("blocker").checked = websiteBlocked || false;
+
+  // if (websiteBlocked) {
+  //   await applyBlocking();
+  // }
 
 
   const { timerDuration } = await chrome.storage.local.get(['timerDuration']);
