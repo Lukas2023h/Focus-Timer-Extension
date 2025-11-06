@@ -5,7 +5,11 @@
   "manifest_version": 3,
   "action": {
     "default_popup": "extension.html",
-    "default_icon": "pic/icon.png"
+    "default_icon": "pic/icon.png",
+    "default_popup_size": {
+      "width": 400,
+      "height": 700
+    }
   },
   "options_page": "settings.html",
   "background": { "service_worker": "js/sw.js" },
