@@ -7,6 +7,7 @@ chrome.alarms.onAlarm.addListener( async (alarm) => {
     let remaining = endTime - Date.now();
 
     if (remaining <= 0) { 
+      await setStatistics();
       chrome.alarms.clear("timer-alarm");
       chrome.storage.local.remove('endTime');
       chrome.notifications.create("time-done", {
@@ -19,6 +20,25 @@ chrome.alarms.onAlarm.addListener( async (alarm) => {
     }
   }
 })
+
+
+async function setStatistics() {
+  let { session = [] } = await chrome.storage.local.get(["session"]);
+  const { timerDuration } = await chrome.storage.local.get(['timerDuration']);
+
+  // Delete Statistics older than 30 Days
+  let lastDate = new Date();
+  lastDate.setDate(lastDate.getDate() - 30);
+  stats = stats.filter(item => item[0] >= lastDate.toISOString());
+
+  session.push({
+    sessionDate: new Date().toISOString(),
+    sessionMin: timerDuration,
+    completed: true
+  });
+
+  await chrome.storage.local.set({session: session});
+}
 
 async function handleSW(request, sender, sendResponse){
 

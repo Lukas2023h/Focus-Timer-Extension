@@ -1,6 +1,6 @@
 {
-  "name": "Hello Extensions",
-  "description": "Base Level Extension",
+  "name": "Focus Timer Extension",
+  "description": "A extension that helps you focus on your work with different features.",
   "version": "1.0",
   "manifest_version": 3,
   "action": {
