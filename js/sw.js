@@ -29,7 +29,7 @@ async function setStatistics() {
   // Delete Statistics older than 30 Days
   let lastDate = new Date();
   lastDate.setDate(lastDate.getDate() - 30);
-  stats = stats.filter(item => item[0] >= lastDate.toISOString());
+  session = session.filter(item => item.sessionDate >= lastDate.toISOString());
 
   session.push({
     sessionDate: new Date().toISOString(),

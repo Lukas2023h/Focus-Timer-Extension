@@ -1,14 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <title>Statistiken - Focus Timer</title>
 </head>
 <body style="width: 400px !important; min-height: 600px !important;">
+  <!-- ==================== HEADER ==================== -->
+  <header class="header">
+    <a href="extension.html" class="back-btn" title="Zurück">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </a>
+    <div class="header-content">
+      <h1 class="header-title">Statistiken</h1>
+      <p class="header-tagline">Deine Produktivität im Überblick</p>
+    </div>
+  </header>
 
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-content stats-content">
+    
+    <!-- View Toggle -->
+    <div class="view-toggle">
+      <button class="toggle-btn active" data-view="week">Letzte 7 Tage</button>
+      <button class="toggle-btn" data-view="month">Monat</button>
+    </div>
 
+    <!-- Streak Card -->
+    <div class="card streak-card">
+      <div class="card-content">
+        <div class="streak-icon">🔥</div>
+        <div class="streak-info">
+          <div class="streak-label">Aktuelle Serie</div>
+          <div class="streak-value">
+            <span id="streak-days">0</span> Tage 🔥
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Summary Stats Grid -->
+    <div class="summary-stats">
+      <div class="stat-item">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-value" id="total-time">0h 0m</div>
+        <div class="stat-label">Gesamtzeit</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">✓</div>
+        <div class="stat-value" id="total-sessions">0</div>
+        <div class="stat-label">Sessions</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value" id="avg-per-day">0m</div>
+        <div class="stat-label">Ø pro Tag</div>
+      </div>
+    </div>
+
+    <!-- Week View -->
+    <div class="stats-view week-view active">
+      <div class="card">
+        <div class="card-header">
+          <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <h3 class="card-title">Wochenübersicht</h3>
+        </div>
+        <div class="card-content">
+          <div class="week-chart" id="week-chart">
+            <!-- Days will be inserted here by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Month View -->
+    <div class="stats-view month-view">
+      <div class="card">
+        <div class="card-header">
+          <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <h3 class="card-title">Monatsübersicht</h3>
+        </div>
+        <div class="card-content">
+          <div class="calendar-grid" id="calendar-grid">
+            <!-- Calendar will be inserted here by JS -->
+          </div>
+          <div class="calendar-legend">
+            <span class="legend-label">Weniger</span>
+            <div class="legend-colors">
+              <div class="legend-box" data-level="0"></div>
+              <div class="legend-box" data-level="1"></div>
+              <div class="legend-box" data-level="2"></div>
+              <div class="legend-box" data-level="3"></div>
+              <div class="legend-box" data-level="4"></div>
+            </div>
+            <span class="legend-label">Mehr</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Best Day Card -->
+    <div class="card best-day-card">
+      <div class="card-content">
+        <div class="best-day-icon">⭐</div>
+        <div class="best-day-info">
+          <div class="best-day-label">Bester Tag</div>
+          <div class="best-day-value" id="best-day-date">-</div>
+          <div class="best-day-stats">
+            <span id="best-day-time">0m</span> • <span id="best-day-sessions">0 Sessions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <p class="footer-text">v1.0 • Focus Timer Extension</p>
+  </footer>
+
+  <!-- Tooltip for calendar hover -->
+  <div class="calendar-tooltip" id="calendar-tooltip">
+    <div class="tooltip-date"></div>
+    <div class="tooltip-time"></div>
+    <div class="tooltip-sessions"></div>
+  </div>
 
   <script src="js/stats.js"></script>
 </body>

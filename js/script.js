@@ -43,7 +43,7 @@ function initProgressRing() {
     defs.appendChild(gradient);
     svg.insertBefore(defs, svg.firstChild);
   }
-}
+}   
 
 // ==================== BUTTON STATE MANAGEMENT ====================
 async function updateButtons() {
