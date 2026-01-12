@@ -1,3 +1,15 @@
+// --Payment Processor--
+importScripts('ExtPay.js')
+
+const extpay = ExtPay('focus-timer-ext'); 
+extpay.startBackground(); 
+
+// Check if they are paid whenever the extension starts
+extpay.getUser().then(user => {
+    console.log('Is user paid?', user.paid);
+});
+
+
 chrome.runtime.onMessage.addListener(handleSW);
 
 chrome.alarms.onAlarm.addListener( async (alarm) => {

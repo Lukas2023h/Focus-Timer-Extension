@@ -1,3 +1,16 @@
+// --Payment Processor--
+const extpay = ExtPay('focus-timer-ext');
+
+async function checkStatus() {
+    const user = await extpay.getUser();
+    
+    if (user.paid === true) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 // ==================== PROGRESS RING LOGIC ====================
 // SVG Circle: circumference = 2 * PI * radius = 2 * 3.14159 * 85 = 534
 const CIRCLE_CIRCUMFERENCE = 534;
@@ -51,7 +64,7 @@ async function updateButtons() {
   const stop = document.getElementById('stop');
   const { isPaused } = await chrome.storage.local.get(["isPaused"]);
 
-  if (isPaused || isPaused === undefined) {
+  if (isPaused === true || isPaused === undefined) {
     start.disabled = false;
     stop.disabled = true;
     // Remove timer-active class
@@ -104,6 +117,21 @@ async function blockSite() {
 
 // ==================== MAIN INITIALIZATION ====================
 document.addEventListener("DOMContentLoaded", async () => {
+  const payButton = document.getElementById('pay-button');
+
+  if (await checkStatus()) {
+    payButton.classList.add('premium');
+    payButton.title = 'Premium aktiv';
+  } else {
+    payButton.classList.remove('premium');
+    payButton.title = 'Premium freischalten';
+  }
+
+  payButton.addEventListener('click', function() {
+    console.log("pay button click");
+    extpay.openPaymentPage();
+  })
+
   // Initialize progress ring
   initProgressRing();
   

@@ -148,6 +148,40 @@ body {
   transform: translateY(-1px);
 }
 
+/* ==================== PREMIUM BUTTON ==================== */
+#pay-button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  background: white;
+  color: var(--color-gray-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  font-size: 0; /* Text verstecken falls vorhanden */
+}
+
+#pay-button:hover {
+  background: var(--color-gray-50);
+  border-color: var(--color-gray-300);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+#pay-button.premium {
+  color: #FFD700;
+  border-color: #FFD700;
+}
+
+#pay-button.premium:hover {
+  background: #fffbeb;
+  color: #FFA500;
+}
+
 /* ==================== MAIN CONTENT ==================== */
 .main-content {
   padding: var(--spacing-md) var(--spacing-lg); /* Weniger Padding oben/unten */
@@ -765,6 +799,12 @@ body::-webkit-scrollbar-thumb:hover {
   display: block;
 }
 
+.month-view {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 /* ==================== WEEK VIEW ==================== */
 .week-chart {
   display: flex;
@@ -1114,4 +1154,63 @@ body::-webkit-scrollbar-thumb:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
   transform: translateY(-1px);
+}
+
+/* ==================== WEEK CHART CONTAINER ==================== */
+.week-chart {
+  display: flex;
+  flex-direction: row;  /* Horizontal nebeneinander */
+  justify-content: flex-start;  /* Gleichmäßig verteilt */
+  align-items: flex-end;  /* Balken unten ausrichten */
+  gap: 12px;
+  height: 200px;
+  padding: 10px;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+/* ==================== EINZELNE BALKEN ==================== */
+.chart-bar {
+  /* Wichtig: Keine position: absolute oder float! */
+  width: 30px;
+  min-height: 5px;  /* Minimum-Höhe auch bei 0 Minuten */
+  background: linear-gradient(to top, #9333ea, #2563eb);
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(147, 51, 234, 0.3);
+  position: relative;
+}
+
+/* ==================== HOVER EFFECT ==================== */
+.chart-bar:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 6px 12px rgba(147, 51, 234, 0.4);
+  cursor: pointer;
+}
+
+/* ==================== EMPTY BAR (0 Minutes) ==================== */
+.chart-bar0 {
+  background: #4f5153;
+  opacity: 0.6;
+  width: 30px;
+  min-height: 12px;
+}
+
+/* ==================== DAY WRAPPER ==================== */
+.chart-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==================== LABEL ==================== */
+.chart-label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
