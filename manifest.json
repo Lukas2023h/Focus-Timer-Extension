@@ -1,14 +1,21 @@
 {
   "name": "Focus Timer Extension",
-  "description": "A extension that helps you focus on your work with different features.",
+  "description": "A extension that helps you focus on your work with Statistics and a Website Blocker",
   "version": "1.0",
   "manifest_version": 3,
+  "icons": {
+  "16": "pic/icon-16.png",
+  "32": "pic/icon-32.png",
+  "48": "pic/icon-48.png",
+  "128": "pic/icon-128.png"
+  },
   "action": {
     "default_popup": "extension.html",
-    "default_icon": "pic/icon.png",
-    "default_popup_size": {
-      "width": 400,
-      "height": 700
+    "default_icon": {
+    "16": "pic/icon-16.png",
+    "32": "pic/icon-32.png",
+    "48": "pic/icon-48.png",
+    "128": "pic/icon-128.png"
     }
   },
   "options_page": "settings.html",
